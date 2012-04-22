@@ -36,10 +36,10 @@ class User
 			$result = mysql_fetch_array($send, MYSQL_ASSOC);
 		
 			if($result['sessid'] == @$_COOKIE['auth_key']) {
-				return 1;
+				return TRUE;
 			}
 			else {
-				return 0;
+				return FALSE;
 			}
 		
 		}
@@ -55,10 +55,10 @@ class User
 		if ( $result = $this->db->sendQuery ($query) ) {
 			$row = mysql_fetch_row($result);
 			if ($row > 0) {
-				return 1;
+				return TRUE;
 			}
 			else {
-				return 0;
+				return FALSE;
 			}
 		}
 	}
@@ -67,10 +67,10 @@ class User
 		
 		$query = "INSERT INTO utenti (id,email,username,password) VALUES ('NULL', '$email', '$username', '$password')";
 		if( $this->db->sendQuery($query) ) {
-			return 1;
+			return TRUE;
 		}
 		else {
-		    return 0;
+		    return FALSE;
 		}
 	}
 	
