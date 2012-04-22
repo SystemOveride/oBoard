@@ -16,14 +16,19 @@ class MySQL
 	}
 	
 	public function connect($db_host, $db_name, $db_user, $db_password) {
-		$this->$db = mysql_connect($db_host, $db_user, $db_password) or die ("Impossibile connettersi all'host" . $db_host);
-		mysql_select_db ($db_name,$this->$db) or die ("Impossibile connettersi al database ". $db_name);
+		if(!$this->db = mysql_connect($db_host, $db_user, $db_password)) {
+			die ("Impossibile connettersi all'host" . $db_host);
+		}
+		
+		if(!mysql_select_db ($db_name, $this->db)) {
+			die ("Impossibile connettersi al database ". $db_name);
+		}
 	}
 	
-	public function query($query) {
+	public function sendQuery($query) {
 		
-		if (!$this->result = @mysql_query(mysql_real_escape_string($query, $this->db))) {
-			return 0;
+		if (!$this->result = mysql_query($query, $this->db)) {
+			die(mysql_error());
 		}
 		else{
 			return $this->result;

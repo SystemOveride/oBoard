@@ -1,0 +1,8 @@
+<form action="class/user.php" method="post">
+
+Email <input type="text" name="email" id="email"><br>
+Username <input type="text" name="username" id="username"><br>
+Password <input type="password" name="password" id="password"><br><br>
+<input type="submit" value="Signup" id="register_button"><br><br>
+<input type="hidden" name="signup" id="signup" value="1"><br>
+</form>

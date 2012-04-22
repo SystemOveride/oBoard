@@ -14,4 +14,9 @@ $date = array(
 	"db_password" => "testone"
 );
 
+
+/* Site Configuration */
+
+$title = "Netcoders Team";
+
 ?>
