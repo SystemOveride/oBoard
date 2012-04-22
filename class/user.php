@@ -34,7 +34,6 @@ class User
 		if ( $send = $this->db->sendQuery ($query) ) {
 			
 			$result = mysql_fetch_array($send, MYSQL_ASSOC);
-			echo $result['sessid'];
 		
 			if($result['sessid'] == @$_COOKIE['auth_key']) {
 				return 1;
@@ -110,7 +109,7 @@ if(isset($_POST['signup']) && isset($_POST['email']) && isset($_POST['password']
 if(isset($_POST['login']) && isset($_POST['email']) && isset($_POST['password'])) {
 	if(User::getInstance()->login(secureVar($_POST['email']), secureVar($_POST['password']))) {
 		User::getInstance()->setSession(secureVar($_POST['email']));
-		echo "Loggato";
+		header("Location: ../index.php");
 	}
 	else{
 		echo "Errore email/password";
