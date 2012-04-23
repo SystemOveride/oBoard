@@ -12,16 +12,18 @@ class User
 {
 	private static $_instance;
 	
-	function __construct() {
-		
+	function __construct() 
+	
+	{	
 		include_once('db.php');
 		include("config.php");
 		
 		$this->db = new MySQL($date['db_host'], $date['db_name'], $date['db_user'], $date['db_password']);
 	}
 	
-	function is_logged () {
-		
+	function is_logged () 
+	
+	{
 		if ( isset($_COOKIE['email']) ) {
 			$email = $_COOKIE['email'];
 		}
@@ -29,7 +31,7 @@ class User
 			return FALSE;
 		}
 		
-		$query = "SELECT sessid FROM utenti WHERE email = '$email'";
+		$query = "SELECT sessid FROM users WHERE email = '$email'";
 		
 		if ( $send = $this->db->sendQuery ($query) ) {
 			
@@ -48,9 +50,10 @@ class User
 		}
 	}
 	
-	function login($email, $password) {
+	function login($email, $password) 
 	
-		$query = "SELECT * FROM utenti WHERE email = '$email' AND password = '$password'";
+	{
+		$query = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
 		
 		if ( $result = $this->db->sendQuery ($query) ) {
 			$row = mysql_fetch_row($result);
@@ -63,9 +66,11 @@ class User
 		}
 	}
 	
-	function register($email, $username, $password) {
+	function register($email, $username, $password)
+
+	{
 		
-		$query = "INSERT INTO utenti (id,email,username,password) VALUES ('NULL', '$email', '$username', '$password')";
+		$query = "INSERT INTO users (id,email,username,password) VALUES ('NULL', '$email', '$username', '$password')";
 		if( $this->db->sendQuery($query) ) {
 			return TRUE;
 		}
@@ -76,12 +81,13 @@ class User
 	
 	function setSession ($email) {
 		$id = session_id();
-		$this->db->sendQuery("UPDATE utenti SET sessid = '$id' WHERE email = '$email'");
+		$this->db->sendQuery("UPDATE users SET sessid = '$id' WHERE email = '$email'");
 		setcookie("email", $email, time() + 3600, '/');
 		setcookie("auth_key", $id, time() + 3600, '/');
 	}
 	
 	public static function getInstance()
+	
     {
         if (is_null(self::$_instance)) {
             self::$_instance = new self;
