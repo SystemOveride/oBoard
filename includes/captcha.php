@@ -25,11 +25,11 @@ for ( $i=0; $i<$len_tot; $i++ ) {
 if ( mt_rand ( 0, 1 ) == 1 ) {
     imagestring ( $img, 5, 3, 10, $string_correct, $green_text );
     imagestring ( $img, 5, 12 + 9 * $len_right, 10, $string_wrong, $red_text );
-    imageline ( $img , 3, 17, 100, 17, $line_colour );
+    imageline ( $img , 3, 14, 100, 14, $line_colour );
 } else {
     imagestring ( $img, 5, 3, 10, $string_wrong, $red_text );
     imagestring ( $img, 5, 9 * ( $len_tot - $len_right ) - 6, 10, $string_correct, $green_text );
-    imageline ( $img , 3, 17, 100, 17, $line_colour );
+    imageline ( $img , 3, 14, 100, 14, $line_colour );
 }
 
 $_SESSION['captcha_code'] = md5 ( strtolower ( $string_correct ) );
