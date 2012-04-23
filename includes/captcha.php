@@ -1,6 +1,6 @@
 <?php
 session_start();
-$source 	        = "back_captcha.png";
+$source 	        = "../template/img/back.jpg";
 $img 		        = imagecreatefrompng($source);
 $green_text 		= imagecolorallocate( $img, 18, 192, 34 );
 $red_text 	    	= imagecolorallocate( $img, 196, 20, 3 );
