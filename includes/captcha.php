@@ -1,18 +1,18 @@
 <?php
 session_start();
-$source 		        = "back.jpg";
-$img 			        = imagecreatefromjpeg($source);
+$source 	        = "back_captcha.png";
+$img 		        = imagecreatefrompng($source);
 $green_text 		= imagecolorallocate( $img, 18, 192, 34 );
-$red_text 		    = imagecolorallocate( $img, 196, 20, 3 );
+$red_text 	    	= imagecolorallocate( $img, 196, 20, 3 );
 $line_colour 		= imagecolorallocate( $img, 0, 0, 0 );
-$len_tot	            = 10;
+$len_tot	        = 10;
 $len_right 	        = mt_rand(4,8);
-$alphas 		        = range('A', 'Z');
-$numeric		        = range(0,9);
-$alphanumeric	= array_merge($alphas,$numeric);
-$string_correct	= "";
+$alphas 	        = range('A', 'Z');
+$numeric	        = range(0,9);
+$alphanumeric		= array_merge($alphas,$numeric);
+$string_correct		= "";
 $string_wrong		= "";
-$colors 		        = array();
+$colors 		= array();
 
 for ( $i=0; $i<$len_tot; $i++ ) {
 	if ( $i <= $len_right ) {
