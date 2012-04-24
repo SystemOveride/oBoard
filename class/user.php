@@ -16,7 +16,13 @@ class User
 	
 	{	
 		include_once('db.php');
-		include("config.php");
+		
+		if (include("config.php")) {
+			include ("config.php");
+		}
+		else{
+			include("../config.php");
+		}
 		
 		$this->db = new MySQL($date['db_host'], $date['db_name'], $date['db_user'], $date['db_password']);
 	}
