@@ -32,7 +32,7 @@ if ( mt_rand ( 0, 1 ) == 1 ) {
     imageline ( $img , 3, 14, 100, 14, $line_colour );
 }
 
-$_SESSION['captcha_code'] = md5 ( strtolower ( $string_correct ) );
+$_SESSION['captcha_code'] = md5 ( strtolower ( $string_correct )."/randomstring/" );
 header ( "Content-type: image/png" );
 imagepng ( $img );
 
