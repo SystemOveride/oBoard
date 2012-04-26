@@ -4,42 +4,40 @@
  * Database Connection Class
  */
 
-class MySQL 
+require_once '../config.php';
 
-{
-	
-	private $db = null;
-	private $result = null;
-	
-	function __construct($db_host, $db_name, $db_user, $db_password) {
-		$this->connect($db_host, $db_name, $db_user, $db_password);
-	}
-	
-	public function connect($db_host, $db_name, $db_user, $db_password) {
-		if(!$this->db = mysql_connect($db_host, $db_user, $db_password)) {
-			die ("Impossibile connettersi all'host" . $db_host);
-		}
-		
-		if(!mysql_select_db ($db_name, $this->db)) {
-			die ("Impossibile connettersi al database ". $db_name);
+class MySQL {
+	protected $db = NULL;
+
+	public function __construct(){
+		if(!$this->db = mysql_connect($dbinfo['host'], $dbinfo['user'], $dbinfo['password'])){
+			die ("Impossibile connettersi all'host." . $db_host);
+		} else if(!mysql_select_db($dbinfo['name'], $this->db)) {
+			die ("Impossibile connettersi al database.". $db_name);
 		}
 	}
-	
-	public function sendQuery($query) {
-		
-		if (!$this->result = mysql_query($query, $this->db)) {
+
+	public function sanitize($value){
+		return mysql_real_escape_string($value, $this->db);
+	}
+
+	public function sanitize_array(&$values){
+		foreach ($values as &$value){
+			$value = $this->sanitize($value);
+		}
+	}
+
+	public function query($query_string){
+		if (!$res = mysql_query($query_string, $this->db)) {
 			die(mysql_error());
+		} else{
+			return $res;
 		}
-		else{
-			return $this->result;
-		}
-		
 	}
-	
+
 	public function __destruct() {
-		@mysql_close ($this->db);
+		@mysql_close($this->db);
 	}
-	
 }
 
 ?>
