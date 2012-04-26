@@ -12,7 +12,6 @@ $numeric	        = range(0,9);
 $alphanumeric		= array_merge($alphas,$numeric);
 $string_correct		= "";
 $string_wrong		= "";
-$colors 		= array();
 
 for ( $i=0; $i<$len_tot; $i++ ) {
 	if ( $i <= $len_right ) {
