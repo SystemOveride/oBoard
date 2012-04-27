@@ -55,16 +55,17 @@ class Engine extends MySQL {
 	}
 	public function fill($placeholder, $value){
 		($this->has_placeholder($placeholder)) or die("Placeholder $placeholder non trovato.");
-		$this->template = str_replace("<!-- $placeholder -->", $value, $this->template);
+		$this->template = str_replace("<!-- %$placeholder% -->", $value, $this->template);
 	}
 	public function fill_fork($placeholder, $value){
 		($this->has_placeholder($placeholder)) or die("Placeholder $placeholder non trovato.");
-		$fork = str_replace("<!-- $placeholder -->", $value, $this->template);
+		$fork = str_replace("<!-- %$placeholder% -->", $value, $this->template);
 		array_push($this->forks, $fork);
 	}
 	public function prepend($ei, $request=false){
 		($ei instanceof Engine) or die("Non istanza di Engine passata ad Engine::prepend()");
 		($request) ? NULL : $ei->append($this, true);
+
 		$this->prev = $ei;
 	}
 	public function append($ei, $request=false){
