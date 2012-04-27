@@ -18,7 +18,7 @@ class MySQL {
 	}
 
 	public function sanitize($value){
-		return mysql_real_escape_string($value, $this->db);
+		return mysql_real_escape_string(htmlentities(stripslashes($value, $this->db)));
 	}
 
 	public function sanitize_array(&$values){
@@ -34,7 +34,21 @@ class MySQL {
 			return $res;
 		}
 	}
-
+	public function mkpasswd($plain){
+		$salt = "";
+		$asctab = Array();
+		foreach (range(32, 127) as $code){
+			array_push($asctab, chr($code));
+		}
+		shuffle($asctab);
+		for($i=0; $i < 31; $i++){
+			$r = mt_rand(32, 127);
+			$salt .= $asctab[r];
+		}
+		$salt = sha1($salt);
+		$passwd = md5($plain . $salt) . "." . $salt;
+		return $passwd;
+	}
 	public function __destruct() {
 		@mysql_close($this->db);
 	}

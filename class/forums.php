@@ -1,28 +1,23 @@
 <?php
 
+/*
+ *
+ * TODO: ALL
+ *
+ */
+
 class Forum {
-	
-	private static $_instance;
-	
-	function __construct() 
-	
-	{
-		
+	function __construct() {
 		include_once('db.php');
 		include("config.php");
-		
 		$this->db = new MySQL($date['db_host'], $date['db_name'], $date['db_user'], $date['db_password']);
 	}
-	
-	
-	
-	function show_forums() 
-	
-	{
+
+	function show_forums(){
 		echo "<div id='forums'>";
 		$cat_query = "SELECT * FROM categories";
 		$result_cat = $this->db->sendQuery($cat_query);
-		
+
 		while ($result = mysql_fetch_array($result_cat)) {
 			$id = $result['id'];
 			echo "<div class='hn'>" . $result['name'] . "<br></div><br>";
@@ -34,19 +29,8 @@ class Forum {
 			}
 			echo "<br>";
 		}
-		
 		echo "</div>";
 	}
-	
-	
-	public static function getInstance()
-	
-    {
-        if (is_null(self::$_instance)) {
-            self::$_instance = new self;
-        }
-        return self::$_instance;
-    }
 }
 
 ?>
