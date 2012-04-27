@@ -2,6 +2,7 @@
 
 /*
  * Database Connection Class
+ * TODO: Add MySQL::dump()
  */
 
 require_once '../config.php';
