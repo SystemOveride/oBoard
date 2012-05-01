@@ -9,6 +9,7 @@ require '../config.php';
 require_once 'db.php';
 
 class Engine extends MySQL {
+	private $tname;
 	private $template;
 	private $forks = NULL;
 	private $prev = NULL;
@@ -26,9 +27,9 @@ class Engine extends MySQL {
 		}
 	}
 	public function __destruct(){
-		$this->prev->detach_next(true);
-		$this->next->detach_prev(true);
-		$this->prev->append($this->next);
+		($this->prev) && $this->prev->detach_next(true);
+		($this->next) && $this->next->detach_prev(true);
+		($this->prev && $this->next) && $this->prev->append($this->next);
 		parent::destruct();
 	}
 	public function getprev(){
@@ -45,21 +46,20 @@ class Engine extends MySQL {
 
 	/* Template */
 	private function load_template($template){
-		if (!$tmpl = file_get_contents($template)){
-			die("Impossibile caricare il template '$template`");
-		}
+		$this->tname = $template;
+		($tmpl = file_get_contents($template)) or die("Impossibile caricare il template '$template`");
 		return $tmpl;
 	}
 	private function has_placeholder($name){
-		return !(strpos($this->template, "<!-- $name -->") === false);
+		return !(strpos($this->template, "<!-- %$name% -->") === false);
 	}
 
 	/* SQL-driven Filling */
 	public function autofill($query){
 		($this->db) or die("Non connesso al database.");
-		($query) or die("Invalid query supplied to Engine::autofill()");
+		($query) or die("Invalid query supplied to Engine(\"" . $this->tname . "\")::autofill()");
 		$res = $this->query($query);
-		(mysql_num_rows($res) != 1) and die("Numero di righe passate ad Engine::autofill() diverso da 1");
+		(mysql_num_rows($res) != 1) and die("Numero di righe passate ad Engine(\"" . $this->tname . "\")::autofill() diverso da 1");
 		$row = mysql_fetch_assoc($res);
 		foreach ($row as $name => $value){
 			$this->fill($name, $value);
@@ -67,12 +67,12 @@ class Engine extends MySQL {
 	}
 	public function autofill_iter($query){
 		($this->db) or die("Non connesso al database.");
-		($query) or die("Invalid query supplied to Engine::autofill_iter()");
+		($query) or die("Invalid query supplied to Engine(\"" . $this->tname . "\")::autofill_iter()");
 		if ($this->forks == NULL){
 			$this->forks = Array();
 		}
 		$res = $this->query($query);
-		(mysql_num_rows($res) < 1) and die("Set vuoto passato ad Engine::autofill_iter()");
+		(mysql_num_rows($res) < 1) and die("Set vuoto passato ad Engine(\"" . $this->tname . "\")::autofill_iter()");
 		while ($row = mysql_fetch_assoc($res)){
 			foreach ($row as $name => $value){
 				$this->fill_fork($name, $value);
@@ -98,33 +98,33 @@ class Engine extends MySQL {
 
 	/* Linking */
 	public function prepend($ei, $request=false){
-		($ei instanceof Engine) or die("Non istanza di Engine passata ad Engine::prepend()");
+		($ei instanceof Engine) or die("Non istanza di Engine passata ad Engine(\"" . $this->tname . "\")::prepend()");
 		($request) ? NULL : $ei->append($this, true);
-		($this->prev == NULL) or die("Chiamata Engine::prepend() su un'istanza già collegata.");
+		($this->prev == NULL) or die("Chiamata Engine(\"" . $this->tname . "\")::prepend() su un'istanza già collegata.");
 		$this->prev = $ei;
 	}
 	public function append($ei, $request=false){
-		($ei instanceof Engine) or die("Non istanza di Engine passata ad Engine::append()");
+		($ei instanceof Engine) or die("Non istanza di Engine passata ad Engine(\"" . $this->tname . "\")::append()");
 		($request) ? NULL : $ei->prepend($this, true);
-		($this->next == NULL) or die("Chiamata Engine::append() su un'istanza già collegata.");
+		($this->next == NULL) or die("Chiamata Engine(\"" . $this->tname . "\")::append() su un'istanza già collegata.");
 		$this->next = $ei;
 	}
 	public function detach_prev($request=false){
-		($this->prev) or die("Chiamata Engine::detach_prev() su un'istanza non collegata.");
+		($this->prev) or die("Chiamata Engine(\"" . $this->tname . "\")::detach_prev() su un'istanza non collegata.");
 		($request) ? NULL : $this->prev->detach_next(true);
 		$this->prev = NULL;
 	}
 	public function detach_next($request=false){
-		($this->next) or die("Chiamata Engine::detach_next() su un'istanza non collegata.");
+		($this->next) or die("Chiamata Engine(\"" . $this->tname . "\")::detach_next() su un'istanza non collegata.");
 		($request) ? NULL : $this->next->detach_prev(true);
 		$this->next = NULL;
 	}
 
 	/* Nesting
 	public function inherit($ei){
-		($ei instanceof Engine) or die("Non istanza di Engine passata ad Engine::inherit()");
-		($this->next == NULL) or die("Chiamata Engine::inherit() su un'istanza già contenente.");
-		($ei->isinherited()) and die("Passata istanza già inherited ad Engine::inherit");
+		($ei instanceof Engine) or die("Non istanza di Engine passata ad Engine(\"" . $this->tname . "\")::inherit()");
+		($this->next == NULL) or die("Chiamata Engine(\"" . $this->tname . "\")::inherit() su un'istanza già contenente.");
+		($ei->isinherited()) and die("Passata istanza già inherited ad Engine(\"" . $this->tname . "\")::inherit");
 		$this->inner = $ei;
 		$this->inner->isinherited(true);
 	}

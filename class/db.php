@@ -11,10 +11,10 @@ class MySQL {
 	protected $db = NULL;
 
 	public function __construct(){
-		if(!$this->db = mysql_connect($dbinfo['host'], $dbinfo['user'], $dbinfo['password'])){
-			die ("Impossibile connettersi all'host." . $db_host);
-		} else if(!mysql_select_db($dbinfo['name'], $this->db)) {
-			die ("Impossibile connettersi al database.". $db_name);
+		if (!$this->db = mysql_connect($dbinfo['host'], $dbinfo['user'], $dbinfo['password'])){
+			die(mysql_error() . "\nImpossibile connettersi al server MySQL '" . $dbinfo['host'] . "`");
+		} else if (!mysql_select_db($dbinfo['name'], $this->db)){
+			die(mysql_error() . "\nImpossibile selezionare il database '" . $dbinfo['name'] . "`.". $db_name);
 		}
 	}
 
