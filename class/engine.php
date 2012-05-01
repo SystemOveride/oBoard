@@ -120,7 +120,8 @@ class Engine extends MySQL {
 		$this->next = NULL;
 	}
 
-	/* Nesting
+	/* Nesting */
+	/*
 	public function inherit($ei){
 		($ei instanceof Engine) or die("Non istanza di Engine passata ad Engine(\"" . $this->tname . "\")::inherit()");
 		($this->next == NULL) or die("Chiamata Engine(\"" . $this->tname . "\")::inherit() su un'istanza già contenente.");
