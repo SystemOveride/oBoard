@@ -5,7 +5,6 @@
 #    (Lando  rules)    #
 ######################31
 
-require '../config.php';
 require_once 'db.php';
 
 class Engine extends MySQL {
@@ -47,7 +46,7 @@ class Engine extends MySQL {
 	/* Template */
 	private function load_template($template){
 		$this->tname = $template;
-		($tmpl = file_get_contents($template)) or die("Impossibile caricare il template '$template`");
+		($tmpl = file_get_contents("template/".$template)) or die("Impossibile caricare il template '$template`");
 		return $tmpl;
 	}
 	private function has_placeholder($name){
