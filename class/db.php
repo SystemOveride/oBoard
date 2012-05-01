@@ -5,12 +5,16 @@
  * TODO: Add MySQL::dump()
  */
 
-require_once '../config.php';
-
 class MySQL {
 	protected $db = NULL;
 
 	public function __construct(){
+		if(include("config.php")) {
+			include("config.php");
+		}
+		else{
+			include("config.php");
+		}
 		if (!$this->db = mysql_connect($dbinfo['host'], $dbinfo['user'], $dbinfo['password'])){
 			die(mysql_error() . "\nImpossibile connettersi al server MySQL '" . $dbinfo['host'] . "`");
 		} else if (!mysql_select_db($dbinfo['name'], $this->db)){
