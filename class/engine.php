@@ -13,6 +13,7 @@ class Engine extends MySQL {
 	private $forks = NULL;
 	private $prev = NULL;
 	private $next = NULL;
+	private $tmp = NULL;
 	/*
 	private $inner = NULL;
 	private $inherited = FALSE;
@@ -119,7 +120,8 @@ class Engine extends MySQL {
 		$this->next = NULL;
 	}
 
-	/* Nesting
+	/* Nesting */
+	/*
 	public function inherit($ei){
 		($ei instanceof Engine) or die("Non istanza di Engine passata ad Engine(\"" . $this->tname . "\")::inherit()");
 		($this->next == NULL) or die("Chiamata Engine(\"" . $this->tname . "\")::inherit() su un'istanza già contenente.");
@@ -142,9 +144,9 @@ class Engine extends MySQL {
 		if ($this->next != NULL){
 			$tmp = $this->next;
 			do {
-				$rendered = $tmp->render() . "\n";
-				$tmp = $tmp->getnext();
-			} while ($tmp->getnext() != NULL);
+				$rendered .= $tmp->render() . "\n";
+				$this->tmp = $this->getnext();
+			} while ($this->tmp->getnext() != NULL);
 		}
 		return $rendered;
 	}
