@@ -30,7 +30,7 @@ class Engine extends MySQL {
 		($this->prev) && $this->prev->detach_next(true);
 		($this->next) && $this->next->detach_prev(true);
 		($this->prev && $this->next) && $this->prev->append($this->next);
-		parent::destruct();
+		parent::__destruct();
 	}
 	public function getprev(){
 		return $this->prev;
