@@ -143,7 +143,7 @@ class Engine extends MySQL {
 		if ($this->next != NULL){
 			$tmp = $this->next;
 			do {
-				$rendered = $tmp->render() . "\n";
+				$rendered .= $tmp->render() . "\n";
 				$tmp = $tmp->getnext();
 			} while ($tmp->getnext() != NULL);
 		}
