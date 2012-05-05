@@ -65,6 +65,7 @@ class Engine extends MySQL {
 			$this->fill($name, $value);
 		}
 	}
+	
 	public function autofill_iter($query){
 		($this->db) or die("Non connesso al database.");
 		($query) or die("Invalid query supplied to Engine(\"" . $this->tname . "\")::autofill_iter()");
@@ -158,6 +159,36 @@ class Engine extends MySQL {
 		$rendered = $first->cascading_render();
 		return $rendered;
 	}
+}
+
+function show_forums () {
+	$header = new Engine("header.tp");
+	$index = new Engine("index.tp");
+	$cat = new Engine("cat.tp");
+	$forum = new Engine("forum.tp");
+	$footer = new Engine("footer.tp");
+	
+	$header->fill('title','Home');
+	
+	echo $header->render();
+	echo $index->render();
+	
+	
+	$conn = new MySQL();
+	$res_cat = $conn->query("SELECT * FROM categories");
+	
+	while ($row = mysql_fetch_assoc($res_cat)) {
+		$id = $row['id'];
+		$cat = new Engine("cat.tp");
+		$cat->autofill("SELECT name FROM categories WHERE id = '$id'");
+		$sect = new Engine("forum.tp");
+		$sect->autofill_iter("SELECT forum_name FROM forums WHERE category = '$id'");
+		$cat->append($sect);
+		echo $cat->full_render();
+	}
+	
+	echo $footer->render();
+
 }
 
 ?>
