@@ -1,52 +1,39 @@
 <?php
 
-class Forum {
+/*
+ *
+ * Forums Functions
+ *
+ */
+
+function show_forums () {
+	$header = new Engine("header.tp");
+	$index = new Engine("index.tp");
+	$cat = new Engine("cat.tp");
+	$forum = new Engine("forum.tp");
+	$footer = new Engine("footer.tp");
 	
-	private static $_instance;
+	$header->fill('title','Home');
 	
-	function __construct() 
+	echo $header->render();
+	echo $index->render();
 	
-	{
-		
-		include_once('db.php');
-		include("config.php");
-		
-		$this->db = new MySQL($date['db_host'], $date['db_name'], $date['db_user'], $date['db_password']);
+	
+	$conn = new MySQL();
+	$res_cat = $conn->query("SELECT * FROM categories");
+	
+	while ($row = mysql_fetch_assoc($res_cat)) {
+		$id = $row['id'];
+		$cat = new Engine("cat.tp");
+		$cat->autofill("SELECT name FROM categories WHERE id = '$id'");
+		$sect = new Engine("forum.tp");
+		$sect->autofill_iter("SELECT forum_name FROM forums WHERE category = '$id'");
+		$cat->append($sect);
+		echo $cat->full_render();
 	}
 	
-	
-	
-	function show_forums() 
-	
-	{
-		echo "<div id='forums'>";
-		$cat_query = "SELECT * FROM categories";
-		$result_cat = $this->db->sendQuery($cat_query);
-		
-		while ($result = mysql_fetch_array($result_cat)) {
-			$id = $result['id'];
-			echo "<div class='hn'>" . $result['name'] . "<br></div><br>";
-			$query = "SELECT * FROM forums WHERE category = '$id'";
-			$res = $this->db->sendQuery($query);
-			while($row = mysql_fetch_array($res)) {
-				$section_id = $row['id'];
-				echo "<a href='section.php?id=$section_id'>" . $row['name'] ."</a><br><br>";
-			}
-			echo "<br>";
-		}
-		
-		echo "</div>";
-	}
-	
-	
-	public static function getInstance()
-	
-    {
-        if (is_null(self::$_instance)) {
-            self::$_instance = new self;
-        }
-        return self::$_instance;
-    }
+	echo $footer->render();
+
 }
 
 ?>
