@@ -88,11 +88,11 @@ class Engine extends MySQL {
 	/* Filling */
 	public function fill($placeholder, $value){
 		($this->has_placeholder($placeholder)) or die("Placeholder $placeholder non trovato.");
-		$this->template = str_replace("<!-- %$placeholder% -->", $value, $this->template);
+		$this->template = preg_replace("/<!-- %$placeholder% -->/", "/$value/", $this->template);
 	}
 	public function fill_fork($placeholder, $value){
 		($this->has_placeholder($placeholder)) or die("Placeholder $placeholder non trovato.");
-		$fork = str_replace("<!-- %$placeholder% -->", $value, $this->template);
+		$fork = preg_replace("/<!-- %$placeholder% -->/", "/$value/", $this->template);
 		array_push($this->forks, $fork);
 	}
 
